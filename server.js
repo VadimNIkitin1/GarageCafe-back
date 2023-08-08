@@ -7,6 +7,7 @@ import path from "path";
 import { prisma } from "./app/prisma.js";
 
 import productRoutes from "./app/product/product.routes.js";
+import categoryRoutes from "./app/category/category.routes.js";
 
 dotenv.config();
 
@@ -21,7 +22,8 @@ async function main() {
 
   app.use("/uploads", express.static(path.join(__dirname, "/uploads/")));
 
-  app.use("/api/product", productRoutes);
+  app.use("/api/products", productRoutes);
+  app.use("/api/categories", categoryRoutes);
 }
 
 bot.on("message", async (msg) => {

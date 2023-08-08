@@ -5,7 +5,7 @@ import { prisma } from "../prisma.js";
 // @route  POST/api/product
 // @access Public
 export const createNewProduct = asyncHandler(async (req, res) => {
-  const { name, price, imagePath, description, category } = req.body;
+  const { name, price, imagePath, description, categoryId } = req.body;
 
   const product = await prisma.product.create({
     data: {
@@ -13,7 +13,7 @@ export const createNewProduct = asyncHandler(async (req, res) => {
       price,
       imagePath,
       description,
-      category,
+      categoryId,
     },
   });
   res.json(product);
@@ -30,4 +30,49 @@ export const getProducts = asyncHandler(async (req, res) => {
   });
 
   res.json(products);
+});
+
+// @desc    Update product
+// @route 	PUT /api/products/:id
+// @access  Private
+export const updateProduct = asyncHandler(async (req, res) => {
+  const { name, price, imagePath, description, categoryId } = req.body;
+
+  try {
+    const product = await prisma.product.update({
+      where: {
+        id: +req.params.id,
+      },
+      data: {
+        name,
+        price,
+        imagePath,
+        description,
+        categoryId,
+      },
+    });
+
+    res.json(product);
+  } catch (error) {
+    res.status(404);
+    throw new Error("Product not found!");
+  }
+});
+
+// @desc    Delete product
+// @route 	DELETE /api/product/:id
+// @access  Private
+export const deleteProduct = asyncHandler(async (req, res) => {
+  try {
+    const product = await prisma.product.delete({
+      where: {
+        id: +req.params.id,
+      },
+    });
+
+    res.json({ message: "Product deleted!" });
+  } catch (error) {
+    res.status(404);
+    throw new Error("Product not found!");
+  }
 });

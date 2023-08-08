@@ -17,7 +17,17 @@ model Product {
 
   name        String
   price       Int
-  imagePath   String @map("image_path")
+  imagePath   String    @map("image_path")
   description String
-  category    String
+  category    Category? @relation(fields: [categoryId], references: [id])
+  categoryId  Int?
+}
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  name    String    @unique
+  product Product[]
 }
